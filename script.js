@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === КОНФИГУРАЦИЯ API ===
-    // Используем тестовые API. 
-    // Замени URL ниже на те, что даны в твоем задании, когда сервер будет доступен.
+   
     const API_URLS = {
-        // reqres.in возвращает список пользователей с картинками (эмулируем галерею)
-        gallery: 'https://reqres.in/api/users?per_page=4', 
-        // httpbin.org просто возвращает то, что мы ему отправили (эхо-сервер)
-        temperature: 'https://httpbin.org/post' 
+        // Меняем на JSONPlaceholder (он надежнее)
+        gallery: 'https://jsonplaceholder.typicode.com/users', 
+        // Для отправки формы тоже поменяем на надежный эхо-сервер
+        temperature: 'https://jsonplaceholder.typicode.com/posts' 
     };
 
     // Элементы DOM
@@ -82,18 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Логика Галереи
     // ============================================
     async function loadGallery() {
-        // Сброс состояния
         galleryGrid.innerHTML = '';
         emptyMessage.hidden = true;
         loader.hidden = false;
         
         try {
-            // Выполняем запрос с retry (3 попытки)
+            // Запрос данных
             const data = await fetchWithRetry(API_URLS.gallery, {}, 3, 1000);
             
-            // reqres.in возвращает массив в поле .data. 
-            // Если у твоего сервера массив сразу в корне, используй: const images = data;
-            const images = data.data || []; 
+            // JSONPlaceholder возвращает сразу массив, без поля .data
+            // Берем только первые 4 элемента (как в задании)
+            const images = data.slice(0, 4); 
 
             if (images.length === 0) {
                 emptyMessage.hidden = false;
@@ -101,11 +98,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderImages(images);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Ошибка загрузки:', error); // Важно для отладки
             showToast('Не удалось загрузить изображения. Проверьте соединение.', 'error');
         } finally {
             loader.hidden = true;
         }
+    }
+
+    function renderImages(images) {
+        images.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'gallery-item';
+            
+            // Генерируем аватарки через роботов, так как в этом API нет картинок
+            const avatarUrl = `https://robohash.org/${item.id}?set=set4&size=150x150`;
+
+            card.innerHTML = `
+                <img src="${avatarUrl}" alt="${item.name}">
+                <div class="gallery-caption">
+                    <strong>${item.name}</strong><br>
+                    <span>${item.email}</span>
+                </div>
+            `;
+            galleryGrid.appendChild(card);
+        });
     }
 
     function renderImages(images) {
