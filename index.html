@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа 4 - Валидация форм</title>
+    <!-- Подключаем стили -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем скрипт (defer чтобы загрузился после HTML) -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo">WebDev Lab</div>
+            <!-- Кнопка открытия модального окна -->
+            <button id="openDialogBtn" class="btn btn-primary" type="button">Регистрация</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Основы веб-разработки</h1>
+        <p>Нажмите кнопку "Регистрация" в шапке, чтобы открыть форму.</p>
+    </main>
+
+    <!-- Модальное окно (Dialog) -->
+    <dialog id="registerDialog">
+        <div class="dialog-inner">
+            <header class="dialog-header">
+                <h2>Создание аккаунта</h2>
+                <button type="button" id="closeDialogCross" aria-label="Закрыть">&times;</button>
+            </header>
+
+            <p>Пожалуйста, заполните форму. Все поля обязательны.</p>
+
+            <!-- novalidate отключает стандартные браузерные "пузыри" с ошибками -->
+            <form id="registerForm" novalidate>
+                
+                <!-- Поле Имя -->
+                <div class="form-group">
+                    <label for="nameInput">Имя</label>
+                    <input 
+                        type="text" 
+                        id="nameInput" 
+                        name="username" 
+                        required 
+                        minlength="2"
+                        placeholder="Иван"
+                        aria-describedby="nameError"
+                    >
+                    <!-- Элемент для вывода ошибки -->
+                    <span id="nameError" class="error-message" aria-live="polite" hidden></span>
+                </div>
+
+                <!-- Поле Email -->
+                <div class="form-group">
+                    <label for="emailInput">Электронная почта</label>
+                    <input 
+                        type="email" 
+                        id="emailInput" 
+                        name="email" 
+                        required 
+                        placeholder="user@example.com"
+                        aria-describedby="emailError"
+                    >
+                    <span id="emailError" class="error-message" aria-live="polite" hidden></span>
+                </div>
+
+                <!-- Поле Пароль -->
+                <div class="form-group">
+                    <label for="passwordInput">Пароль (мин. 6 символов)</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="passwordInput" 
+                            name="password" 
+                            required 
+                            minlength="6" 
+                            placeholder="******"
+                            aria-describedby="passwordError"
+                        >
+                        <!-- Кнопка "глазик" -->
+                        <button type="button" id="showPasswordBtn" class="eye-btn" aria-label="Показать пароль">
+                            👁️
+                        </button>
+                    </div>
+                    <span id="passwordError" class="error-message" aria-live="polite" hidden></span>
+                </div>
+
+                <!-- Кнопки формы -->
+                <div class="form-actions">
+                    <button type="button" id="closeDialogBtn" class="btn btn-secondary">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+</body>
+</html>
