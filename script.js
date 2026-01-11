@@ -126,16 +126,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderImages(images) {
         images.forEach(item => {
-            // Создаем карточку
             const card = document.createElement('div');
             card.className = 'gallery-item';
             
-            // В reqres поля: avatar (url), first_name (имя)
-            // Подстрой эти поля под реальный ответ твоего сервера (например: item.url, item.title)
+            // Генерируем ссылку на картинку-робота (так как в этом API нет своих картинок)
+            // Используем ID пользователя, чтобы у каждого был свой уникальный робот
+            const avatarUrl = `https://robohash.org/${item.id}?set=set4&size=150x150`;
+
+            // Используем поля name и email, которые есть в новом API
             card.innerHTML = `
-                <img src="${item.avatar}" alt="${item.first_name}">
+                <img src="${avatarUrl}" alt="${item.name}">
                 <div class="gallery-caption">
-                    <strong>${item.first_name} ${item.last_name}</strong><br>
+                    <strong>${item.name}</strong><br>
                     <span>ID: ${item.id}</span>
                 </div>
             `;
